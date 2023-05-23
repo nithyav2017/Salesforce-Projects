@@ -1,0 +1,43 @@
+<template>
+    <lightning-card title="New Job Application" icon-name="standard:contact">
+        <div  class="slds-size_1-of-3">
+            <lightning-accordion active-section-name="A">
+            <lightning-accordion-section name="Accordion_1" label="Job Application Information">
+                
+                <lightning-combobox name="Status" 
+                                    label="Status" 
+                                    placeholder="Choose Status"
+                                    value={rec.Status} 
+                                    onchange={onStatusChange}
+                                    options={statusOption}>
+                </lightning-combobox>
+ 
+                
+                 
+                    <lightning-input label="Position Name" 
+                                    placeholder="Postion Name"
+                                    value={rec.Position} 
+                                    onchange={onPositionChange}>
+                   </lightning-input>
+                
+
+                <lightning-input label="Email" 
+                                placeholder="Email" 
+                                value={rec.Email} 
+                                onchange={onEmailChange}>
+                </lightning-input>
+
+            </lightning-accordion-section>
+
+          <lightning-accordion-section name="Accordion_2" label="Candidate Information">
+          <lightning-input label="Candidate Number" 
+                             placeholder="Candidate Number"
+                             value={rec.CandidateNumber} 
+                             onchange={onCandidateNumberChange}>
+            </lightning-input>
+          </lightning-accordion-section>
+          </lightning-accordion>
+            <lightning-button label="Create New"></lightning-button>
+        </div>
+    </lightning-card>
+</template>

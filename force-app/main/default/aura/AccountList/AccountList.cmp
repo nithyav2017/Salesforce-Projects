@@ -1,0 +1,21 @@
+<aura:component>
+    <aura:registerEvent name="accountsLoaded" type="c:AccountsLoaded"/>
+    <aura:handler name="accountsLoaded" value="{!this}" event="c:AccountsLoaded" action="{!c.onAccountsLoaded}"/>
+    <lightning:navigation aura:id="navigation"/>
+    <aura:attribute name="rows" type="Map[]"/>
+    <aura:attribute name="cols" type="Map[]"/>
+    <aura:attribute name="msg" type="String" default="Test"/>
+
+    <lightning:card title="Account List" iconName="standard:account">
+        <lightning:datatable
+            data="{!v.rows}"
+            columns="{!v.cols}"
+            keyField="Id"
+            hideCheckboxColumn="true"
+            showRowNumberColumn="true"
+            onrowaction="{!c.onRowAction}"/>
+
+            <lightning:textarea value="{!v.msg}"></lightning:textarea>
+    </lightning:card>
+   
+</aura:component>	
