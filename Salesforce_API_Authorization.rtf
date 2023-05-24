@@ -1,0 +1,620 @@
+{\rtf1\ansi\ansicpg1252\deff0\nouicompat\deflang1033{\fonttbl{\f0\fnil\fcharset0 Calibri;}}
+{\colortbl ;\red0\green0\blue255;}
+{\*\generator Riched20 10.0.22621}\viewkind4\uc1 
+\pard\sa200\sl276\slmult1\f0\fs22\lang9\par
+\par
+
+\pard\sa200\sl276\slmult1\qc\b\fs28 Salesforce API gateway authorization\par
+\par
+
+\pard\sa200\sl276\slmult1\b0\fs22 When salesforce API needs to access from 3rd party application .Net/python/any external web application, salesforce gateway allows the external application in to salesforce once it is authorized successfully. Otherwise , it will return invalid request.\par
+\par
+In order to provide access for external application the salesforce administrstor will give the below information to the development team.\par
+\par
+
+\pard\sa200\sl240\slmult1 Username: nithya.venkatakrishnan2017@brave-wolf-ix7d2z.com\line Password: Testing@1234UawfFJ9fRuvHbLgn4OV1yof (Password+Security Token: Testing@123+4UawfFJ9fRuvHbLgn4OV1yof )\line Consumer Key: 3MVG9ux34Ig8G5er1LvnQPwzc.pmpMuYtWtSOl9t23qZA0bLpedFI0JQdyEPQSb2i4Io16exKpir7VyTKGQYp\line Consumer Secret: B43300E22B326BABA1528AF070E1D6C63FF204424BCB08129A96B8604EFD83D3\par
+\par
+Admin Task:\par
+To get Security Token on Salesforce Org\par
+1. Go to Personal Settings=> Reset Security Token. It will send the token information to our email.\par
+\par
+\par
+\par
+To create Consumer Key and Consumer Secret on Salesforce Org\par
+1. Go to Setup => App Manager=>Create Conected App\par
+2. Give the app name (Ex: Rest API Test) and email Id.\par
+3. Enable OAuth and give call back Url( ie: Salesforce redirect url once it is authorized the request successfully. It may the company url. For now, {{\field{\*\fldinst{HYPERLINK https://localhost.com }}{\fldrslt{https://localhost.com\ul0\cf0}}}}\f0\fs22 ).\par
+4. Click Save. \par
+It will redirct to the connected app page. Click Mange Consumer Details button. From copy Consumer Key and Consumer Secret.\par
+\par
+Getting Access Token:\par
+To get access token \par
+1. Go to postman => Workbench=>New \par
+2. We have to choose POST verb since salesforce has to authorize the credentials.\par
+3. Post the following parameters along with the url.\par
+grant_type : password\par
+client_id: 3MVG9ux34Ig8G5er1LvnQPwzc.pmpMuYtWtSOl9t23qZA0bLpedFI0JQdyEPQSb2i4Io16exKpir7VyTKGQYp [Consumer Key]\par
+client_secret:B43300E22B326BABA1528AF070E1D6C63FF204424BCB08129A96B8604EFD83D3[Consumer Secret]\par
+Username:nithya.venkatakrishnan2017@brave-wolf-ix7d2z.com\par
+password:Testing@1234UawfFJ9fRuvHbLgn4OV1yof \par
+\par
+The below URL will be framed:\par
+{{\field{\*\fldinst{HYPERLINK https://login.salesforce.com/services/oauth2/token?grant_type=password&client_id=3MVG9ux34Ig8G5er1LvnQPwzc.pmpMuYtWtSOl9t23qZA0bLpedFI0JQdyEPQSb2i4Io16exKpir7VyTKGQYp&client_secret=B43300E22B326BABA1528AF070E1D6C63FF204424BCB08129A96B8604EFD83D3&username=nithya.venkatakrishnan2017@brave-wolf-ix7d2z.com&password=Testing@1234UawfFJ9fRuvHbLgn4OV1yof }}{\fldrslt{https://login.salesforce.com/services/oauth2/token?grant_type=password&client_id=3MVG9ux34Ig8G5er1LvnQPwzc.pmpMuYtWtSOl9t23qZA0bLpedFI0JQdyEPQSb2i4Io16exKpir7VyTKGQYp&client_secret=B43300E22B326BABA1528AF070E1D6C63FF204424BCB08129A96B8604EFD83D3&username=nithya.venkatakrishnan2017@brave-wolf-ix7d2z.com&password=Testing@1234UawfFJ9fRuvHbLgn4OV1yof\ul0\cf0}}}}\f0\fs22\par
+4.Click Send.\par
+\par
+It will return the below result\par
+\{\par
+    "access_token": "00DDn000008iCer!ARgAQEVOvHuUXHJ9FFGBvWF0qbBGqWRJM0WObf6BsLLxZ1EQIPjDNIhSGu.nko.W6NeXLszPixNgwJpprZVdqfEWyfAXjMrB",\par
+    "instance_url": "{{\field{\*\fldinst{HYPERLINK https://sritech-dev-ed.trailblaze.my.salesforce.com }}{\fldrslt{https://sritech-dev-ed.trailblaze.my.salesforce.com\ul0\cf0}}}}\f0\fs22 ",\par
+    "id": "{{\field{\*\fldinst{HYPERLINK https://login.salesforce.com/id/00DDn000008iCerMAE/005Dn000004dR7jIAE }}{\fldrslt{https://login.salesforce.com/id/00DDn000008iCerMAE/005Dn000004dR7jIAE\ul0\cf0}}}}\f0\fs22 ",\par
+    "token_type": "Bearer",\par
+    "issued_at": "1684432535703",\par
+    "signature": "oCtwUffj6TfwvEW4NujsLzIn7obrNpDJQDKb4VaPm/c="\par
+\}\par
+\par
+The above access token should be given each time when external application connect with salesforce org.\par
+The below scenario return Account name with related contacts\par
+The URL should be \par
+"Instance_Url"/services/data/v57.0/query?q=SELECT Name,(SELECT Name FROM Contacts ) FROM Account \par
+Headers:\par
+Key: Authorization\par
+Value: Bearer 00DDn000008iCer!ARgAQEVOvHuUXHJ9FFGBvWF0qbBGqWRJM0WObf6BsLLxZ1EQIPjDNIhSGu.nko.W6NeXLszPixNgwJpprZVdqfEWyfAXjMrB [Bearer+ " "+Access_Token]\par
+\par
+If the session expired , the new request should be posted use the above credentials to get the access token.\par
+Click Send.\par
+\par
+If the request validated successfully the below result will be return.\par
+\{\par
+    "totalSize": 20,\par
+    "done": true,\par
+    "records": [\par
+        \{\par
+            "attributes": \{\par
+                "type": "Account",\par
+                "url": "/services/data/v55.0/sobjects/Account/001Dn00000BYg3NIAT"\par
+            \},\par
+            "Name": "Sample Account for Entitlements",\par
+            "Contacts": \{\par
+                "totalSize": 5,\par
+                "done": true,\par
+                "records": [\par
+                    \{\par
+                        "attributes": \{\par
+                            "type": "Contact",\par
+                            "url": "/services/data/v55.0/sobjects/Contact/003Dn00000Dwo3GIAR"\par
+                        \},\par
+                        "Name": "test5 namet6"\par
+                    \},\par
+                    \{\par
+                        "attributes": \{\par
+                            "type": "Contact",\par
+                            "url": "/services/data/v55.0/sobjects/Contact/003Dn00000Dwo0dIAB"\par
+                        \},\par
+                        "Name": "Smith Vasan"\par
+                    \},\par
+                    \{\par
+                        "attributes": \{\par
+                            "type": "Contact",\par
+                            "url": "/services/data/v55.0/sobjects/Contact/003Dn00000Dwo3LIAR"\par
+                        \},\par
+                        "Name": "test7 name7"\par
+                    \},\par
+                    \{\par
+                        "attributes": \{\par
+                            "type": "Contact",\par
+                            "url": "/services/data/v55.0/sobjects/Contact/003Dn00000Dwo0PIAR"\par
+                        \},\par
+                        "Name": "Smith Vasan"\par
+                    \},\par
+                    \{\par
+                        "attributes": \{\par
+                            "type": "Contact",\par
+                            "url": "/services/data/v55.0/sobjects/Contact/003Dn00000Dwo0kIAB"\par
+                        \},\par
+                        "Name": "Elizabath Palmisano"\par
+                    \}\par
+                ]\par
+            \}\par
+        \},\par
+        \{\par
+            "attributes": \{\par
+                "type": "Account",\par
+                "url": "/services/data/v55.0/sobjects/Account/001Dn00000DaA9ZIAV"\par
+            \},\par
+            "Name": "Edge Communications",\par
+            "Contacts": \{\par
+                "totalSize": 4,\par
+                "done": true,\par
+                "records": [\par
+                    \{\par
+                        "attributes": \{\par
+                            "type": "Contact",\par
+                            "url": "/services/data/v55.0/sobjects/Contact/003Dn00000Dwo3HIAR"\par
+                        \},\par
+                        "Name": "pauliun jayaram"\par
+                    \},\par
+                    \{\par
+                        "attributes": \{\par
+                            "type": "Contact",\par
+                            "url": "/services/data/v55.0/sobjects/Contact/003Dn000008fkqEIAQ"\par
+                        \},\par
+                        "Name": "Sean Forbes"\par
+                    \},\par
+                    \{\par
+                        "attributes": \{\par
+                            "type": "Contact",\par
+                            "url": "/services/data/v55.0/sobjects/Contact/003Dn000008fkqDIAQ"\par
+                        \},\par
+                        "Name": "Rose Gonzalez"\par
+                    \},\par
+                    \{\par
+                        "attributes": \{\par
+                            "type": "Contact",\par
+                            "url": "/services/data/v55.0/sobjects/Contact/003Dn00000DwngMIAR"\par
+                        \},\par
+                        "Name": "Smith Vasan"\par
+                    \}\par
+                ]\par
+            \}\par
+        \},\par
+        \{\par
+            "attributes": \{\par
+                "type": "Account",\par
+                "url": "/services/data/v55.0/sobjects/Account/001Dn00000DaA9aIAF"\par
+            \},\par
+            "Name": "Burlington Textiles Corp of America",\par
+            "Contacts": \{\par
+                "totalSize": 1,\par
+                "done": true,\par
+                "records": [\par
+                    \{\par
+                        "attributes": \{\par
+                            "type": "Contact",\par
+                            "url": "/services/data/v55.0/sobjects/Contact/003Dn000008fkqFIAQ"\par
+                        \},\par
+                        "Name": "Jack Rogers"\par
+                    \}\par
+                ]\par
+            \}\par
+        \},\par
+        \{\par
+            "attributes": \{\par
+                "type": "Account",\par
+                "url": "/services/data/v55.0/sobjects/Account/001Dn00000DaA9bIAF"\par
+            \},\par
+            "Name": "Pyramid Construction Inc.",\par
+            "Contacts": \{\par
+                "totalSize": 4,\par
+                "done": true,\par
+                "records": [\par
+                    \{\par
+                        "attributes": \{\par
+                            "type": "Contact",\par
+                            "url": "/services/data/v55.0/sobjects/Contact/003Dn000008fkqGIAQ"\par
+                        \},\par
+                        "Name": "Pat Stumuller"\par
+                    \},\par
+                    \{\par
+                        "attributes": \{\par
+                            "type": "Contact",\par
+                            "url": "/services/data/v55.0/sobjects/Contact/003Dn00000DwlBWIAZ"\par
+                        \},\par
+                        "Name": "Smith Vasan"\par
+                    \},\par
+                    \{\par
+                        "attributes": \{\par
+                            "type": "Contact",\par
+                            "url": "/services/data/v55.0/sobjects/Contact/003Dn00000Dwo1gIAB"\par
+                        \},\par
+                        "Name": "Paulin Jayaram"\par
+                    \},\par
+                    \{\par
+                        "attributes": \{\par
+                            "type": "Contact",\par
+                            "url": "/services/data/v55.0/sobjects/Contact/003Dn00000Dwo1hIAB"\par
+                        \},\par
+                        "Name": "pauliun jayaram"\par
+                    \}\par
+                ]\par
+            \}\par
+        \},\par
+        \{\par
+            "attributes": \{\par
+                "type": "Account",\par
+                "url": "/services/data/v55.0/sobjects/Account/001Dn00000DaA9cIAF"\par
+            \},\par
+            "Name": "Dickenson plc",\par
+            "Contacts": \{\par
+                "totalSize": 1,\par
+                "done": true,\par
+                "records": [\par
+                    \{\par
+                        "attributes": \{\par
+                            "type": "Contact",\par
+                            "url": "/services/data/v55.0/sobjects/Contact/003Dn000008fkqHIAQ"\par
+                        \},\par
+                        "Name": "Andy Young"\par
+                    \}\par
+                ]\par
+            \}\par
+        \},\par
+        \{\par
+            "attributes": \{\par
+                "type": "Account",\par
+                "url": "/services/data/v55.0/sobjects/Account/001Dn00000DaA9dIAF"\par
+            \},\par
+            "Name": "Grand Hotels & Resorts Ltd",\par
+            "Contacts": \{\par
+                "totalSize": 2,\par
+                "done": true,\par
+                "records": [\par
+                    \{\par
+                        "attributes": \{\par
+                            "type": "Contact",\par
+                            "url": "/services/data/v55.0/sobjects/Contact/003Dn000008fkqIIAQ"\par
+                        \},\par
+                        "Name": "Tim Barr"\par
+                    \},\par
+                    \{\par
+                        "attributes": \{\par
+                            "type": "Contact",\par
+                            "url": "/services/data/v55.0/sobjects/Contact/003Dn000008fkqJIAQ"\par
+                        \},\par
+                        "Name": "John Bond"\par
+                    \}\par
+                ]\par
+            \}\par
+        \},\par
+        \{\par
+            "attributes": \{\par
+                "type": "Account",\par
+                "url": "/services/data/v55.0/sobjects/Account/001Dn00000DaA9eIAF"\par
+            \},\par
+            "Name": "United Oil & Gas Corp.",\par
+            "Contacts": \{\par
+                "totalSize": 6,\par
+                "done": true,\par
+                "records": [\par
+                    \{\par
+                        "attributes": \{\par
+                            "type": "Contact",\par
+                            "url": "/services/data/v55.0/sobjects/Contact/003Dn000008fkqPIAQ"\par
+                        \},\par
+                        "Name": "Arthur Song"\par
+                    \},\par
+                    \{\par
+                        "attributes": \{\par
+                            "type": "Contact",\par
+                            "url": "/services/data/v55.0/sobjects/Contact/003Dn000008fkqLIAQ"\par
+                        \},\par
+                        "Name": "Lauren Boyle"\par
+                    \},\par
+                    \{\par
+                        "attributes": \{\par
+                            "type": "Contact",\par
+                            "url": "/services/data/v55.0/sobjects/Contact/003Dn000008fkqKIAQ"\par
+                        \},\par
+                        "Name": "Stella Pavlova"\par
+                    \},\par
+                    \{\par
+                        "attributes": \{\par
+                            "type": "Contact",\par
+                            "url": "/services/data/v55.0/sobjects/Contact/003Dn000008fkqUIAQ"\par
+                        \},\par
+                        "Name": "Avi Green"\par
+                    \},\par
+                    \{\par
+                        "attributes": \{\par
+                            "type": "Contact",\par
+                            "url": "/services/data/v55.0/sobjects/Contact/003Dn00000Dwo3QIAR"\par
+                        \},\par
+                        "Name": "test8 name8"\par
+                    \},\par
+                    \{\par
+                        "attributes": \{\par
+                            "type": "Contact",\par
+                            "url": "/services/data/v55.0/sobjects/Contact/003Dn00000DwnzuIAB"\par
+                        \},\par
+                        "Name": "Smith Vasan"\par
+                    \}\par
+                ]\par
+            \}\par
+        \},\par
+        \{\par
+            "attributes": \{\par
+                "type": "Account",\par
+                "url": "/services/data/v55.0/sobjects/Account/001Dn00000DaA9fIAF"\par
+            \},\par
+            "Name": "Express Logistics and Transport",\par
+            "Contacts": \{\par
+                "totalSize": 2,\par
+                "done": true,\par
+                "records": [\par
+                    \{\par
+                        "attributes": \{\par
+                            "type": "Contact",\par
+                            "url": "/services/data/v55.0/sobjects/Contact/003Dn000008fkqMIAQ"\par
+                        \},\par
+                        "Name": "Babara Levy"\par
+                    \},\par
+                    \{\par
+                        "attributes": \{\par
+                            "type": "Contact",\par
+                            "url": "/services/data/v55.0/sobjects/Contact/003Dn000008fkqNIAQ"\par
+                        \},\par
+                        "Name": "Josh Davis"\par
+                    \}\par
+                ]\par
+            \}\par
+        \},\par
+        \{\par
+            "attributes": \{\par
+                "type": "Account",\par
+                "url": "/services/data/v55.0/sobjects/Account/001Dn00000DaA9gIAF"\par
+            \},\par
+            "Name": "University of Arizona",\par
+            "Contacts": \{\par
+                "totalSize": 1,\par
+                "done": true,\par
+                "records": [\par
+                    \{\par
+                        "attributes": \{\par
+                            "type": "Contact",\par
+                            "url": "/services/data/v55.0/sobjects/Contact/003Dn000008fkqOIAQ"\par
+                        \},\par
+                        "Name": "Jane Grey"\par
+                    \}\par
+                ]\par
+            \}\par
+        \},\par
+        \{\par
+            "attributes": \{\par
+                "type": "Account",\par
+                "url": "/services/data/v55.0/sobjects/Account/001Dn00000DaA9hIAF"\par
+            \},\par
+            "Name": "United Oil & Gas, UK",\par
+            "Contacts": \{\par
+                "totalSize": 1,\par
+                "done": true,\par
+                "records": [\par
+                    \{\par
+                        "attributes": \{\par
+                            "type": "Contact",\par
+                            "url": "/services/data/v55.0/sobjects/Contact/003Dn000008fkqQIAQ"\par
+                        \},\par
+                        "Name": "Ashley James"\par
+                    \}\par
+                ]\par
+            \}\par
+        \},\par
+        \{\par
+            "attributes": \{\par
+                "type": "Account",\par
+                "url": "/services/data/v55.0/sobjects/Account/001Dn00000DaA9iIAF"\par
+            \},\par
+            "Name": "United Oil & Gas, Singapore",\par
+            "Contacts": \{\par
+                "totalSize": 2,\par
+                "done": true,\par
+                "records": [\par
+                    \{\par
+                        "attributes": \{\par
+                            "type": "Contact",\par
+                            "url": "/services/data/v55.0/sobjects/Contact/003Dn000008fkqRIAQ"\par
+                        \},\par
+                        "Name": "Tom Ripley"\par
+                    \},\par
+                    \{\par
+                        "attributes": \{\par
+                            "type": "Contact",\par
+                            "url": "/services/data/v55.0/sobjects/Contact/003Dn000008fkqSIAQ"\par
+                        \},\par
+                        "Name": "Liz D'Cruz"\par
+                    \}\par
+                ]\par
+            \}\par
+        \},\par
+        \{\par
+            "attributes": \{\par
+                "type": "Account",\par
+                "url": "/services/data/v55.0/sobjects/Account/001Dn00000DaA9jIAF"\par
+            \},\par
+            "Name": "GenePoint",\par
+            "Contacts": \{\par
+                "totalSize": 2,\par
+                "done": true,\par
+                "records": [\par
+                    \{\par
+                        "attributes": \{\par
+                            "type": "Contact",\par
+                            "url": "/services/data/v55.0/sobjects/Contact/003Dn000008fkqTIAQ"\par
+                        \},\par
+                        "Name": "Edna Frank"\par
+                    \},\par
+                    \{\par
+                        "attributes": \{\par
+                            "type": "Contact",\par
+                            "url": "/services/data/v55.0/sobjects/Contact/003Dn00000DwlAtIAJ"\par
+                        \},\par
+                        "Name": "Smith Vasan"\par
+                    \}\par
+                ]\par
+            \}\par
+        \},\par
+        \{\par
+            "attributes": \{\par
+                "type": "Account",\par
+                "url": "/services/data/v55.0/sobjects/Account/001Dn00000DaA9kIAF"\par
+            \},\par
+            "Name": "sForce",\par
+            "Contacts": \{\par
+                "totalSize": 3,\par
+                "done": true,\par
+                "records": [\par
+                    \{\par
+                        "attributes": \{\par
+                            "type": "Contact",\par
+                            "url": "/services/data/v55.0/sobjects/Contact/003Dn000008fkqVIAQ"\par
+                        \},\par
+                        "Name": "Siddartha Nedaerk"\par
+                    \},\par
+                    \{\par
+                        "attributes": \{\par
+                            "type": "Contact",\par
+                            "url": "/services/data/v55.0/sobjects/Contact/003Dn000008fkqWIAQ"\par
+                        \},\par
+                        "Name": "Jake Llorrac"\par
+                    \},\par
+                    \{\par
+                        "attributes": \{\par
+                            "type": "Contact",\par
+                            "url": "/services/data/v55.0/sobjects/Contact/003Dn00000Dwo0jIAB"\par
+                        \},\par
+                        "Name": "test4 name4"\par
+                    \}\par
+                ]\par
+            \}\par
+        \},\par
+        \{\par
+            "attributes": \{\par
+                "type": "Account",\par
+                "url": "/services/data/v55.0/sobjects/Account/001Dn00000IbgJYIAZ"\par
+            \},\par
+            "Name": "Millburn",\par
+            "Contacts": \{\par
+                "totalSize": 3,\par
+                "done": true,\par
+                "records": [\par
+                    \{\par
+                        "attributes": \{\par
+                            "type": "Contact",\par
+                            "url": "/services/data/v55.0/sobjects/Contact/003Dn00000DwnzvIAB"\par
+                        \},\par
+                        "Name": "Julie Akshay"\par
+                    \},\par
+                    \{\par
+                        "attributes": \{\par
+                            "type": "Contact",\par
+                            "url": "/services/data/v55.0/sobjects/Contact/003Dn00000Dwo0OIAR"\par
+                        \},\par
+                        "Name": "Lauren Jack"\par
+                    \},\par
+                    \{\par
+                        "attributes": \{\par
+                            "type": "Contact",\par
+                            "url": "/services/data/v55.0/sobjects/Contact/003Dn00000Dwo0iIAB"\par
+                        \},\par
+                        "Name": "Trudy mallen"\par
+                    \}\par
+                ]\par
+            \}\par
+        \},\par
+        \{\par
+            "attributes": \{\par
+                "type": "Account",\par
+                "url": "/services/data/v55.0/sobjects/Account/001Dn00000IbfR4IAJ"\par
+            \},\par
+            "Name": "MIndMajix",\par
+            "Contacts": \{\par
+                "totalSize": 2,\par
+                "done": true,\par
+                "records": [\par
+                    \{\par
+                        "attributes": \{\par
+                            "type": "Contact",\par
+                            "url": "/services/data/v55.0/sobjects/Contact/003Dn00000DvBi1IAF"\par
+                        \},\par
+                        "Name": "Sam Raj"\par
+                    \},\par
+                    \{\par
+                        "attributes": \{\par
+                            "type": "Contact",\par
+                            "url": "/services/data/v55.0/sobjects/Contact/003Dn00000Dwo3kIAB"\par
+                        \},\par
+                        "Name": "test9 name9"\par
+                    \}\par
+                ]\par
+            \}\par
+        \},\par
+        \{\par
+            "attributes": \{\par
+                "type": "Account",\par
+                "url": "/services/data/v55.0/sobjects/Account/001Dn00000IbfSMIAZ"\par
+            \},\par
+            "Name": "CodeTech",\par
+            "Contacts": \{\par
+                "totalSize": 2,\par
+                "done": true,\par
+                "records": [\par
+                    \{\par
+                        "attributes": \{\par
+                            "type": "Contact",\par
+                            "url": "/services/data/v55.0/sobjects/Contact/003Dn00000Dval4IAB"\par
+                        \},\par
+                        "Name": "Sara Glade"\par
+                    \},\par
+                    \{\par
+                        "attributes": \{\par
+                            "type": "Contact",\par
+                            "url": "/services/data/v55.0/sobjects/Contact/003Dn00000Dwo0EIAR"\par
+                        \},\par
+                        "Name": "Yazhini Jayaganesh"\par
+                    \}\par
+                ]\par
+            \}\par
+        \},\par
+        \{\par
+            "attributes": \{\par
+                "type": "Account",\par
+                "url": "/services/data/v55.0/sobjects/Account/001Dn00000BYw6bIAD"\par
+            \},\par
+            "Name": "VGFC",\par
+            "Contacts": \{\par
+                "totalSize": 1,\par
+                "done": true,\par
+                "records": [\par
+                    \{\par
+                        "attributes": \{\par
+                            "type": "Contact",\par
+                            "url": "/services/data/v55.0/sobjects/Contact/003Dn00000DwlBvIAJ"\par
+                        \},\par
+                        "Name": "Smith Vasan"\par
+                    \}\par
+                ]\par
+            \}\par
+        \},\par
+        \{\par
+            "attributes": \{\par
+                "type": "Account",\par
+                "url": "/services/data/v55.0/sobjects/Account/001Dn00000RRsSgIAL"\par
+            \},\par
+            "Name": "Hyatt",\par
+            "Contacts": null\par
+        \},\par
+        \{\par
+            "attributes": \{\par
+                "type": "Account",\par
+                "url": "/services/data/v55.0/sobjects/Account/001Dn00000RRsShIAL"\par
+            \},\par
+            "Name": "Hilton Union Square",\par
+            "Contacts": null\par
+        \},\par
+        \{\par
+            "attributes": \{\par
+                "type": "Account",\par
+                "url": "/services/data/v55.0/sobjects/Account/001Dn00000RRsSiIAL"\par
+            \},\par
+            "Name": "Marriott Marquis",\par
+            "Contacts": null\par
+        \}\par
+    ]\par
+\}\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+}
+ 
